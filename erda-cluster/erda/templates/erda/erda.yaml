@@ -35,6 +35,7 @@ spec:
             expose: true
             default: false
         envs:
+          OPENAPI_PUBLIC_URL: https://openapi.dev.terminus.io
           FPS_BACKEND_URL: http://fps:17621
           NETDATA_AGENT_PATH: devops/ci/action-agent
           NETDATA_CI_PATH: devops/ci/pipelines
@@ -58,8 +59,6 @@ spec:
           replicas: 1
           labels:
             GROUP: dice
-        depends_on:
-          - openapi
         expose:
           - 9028
         health_check:

@@ -1,4 +1,7 @@
 namespace: default
+domain: "dev.terminus.io"
+clusterName: "fake-new"
+clusterDomain: "fake-new.viper.run"
 
 image:
   repository: registry.erda.cloud/erda/

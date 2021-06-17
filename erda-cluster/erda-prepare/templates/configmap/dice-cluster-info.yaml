@@ -6,7 +6,7 @@ data:
   DICE_HTTPS_PORT: "443"
   DICE_HTTP_PORT: "80"
   DICE_INSIDE: "false"
-  DICE_IS_EDGE: "false"
+  DICE_IS_EDGE: "true"
   DICE_PROTOCOL:  {{ .Values.configmap.protocol }}
   DICE_ROOT_DOMAIN: {{ .Values.configmap.domain }}
   DICE_SIZE:  {{ .Values.configmap.size }}

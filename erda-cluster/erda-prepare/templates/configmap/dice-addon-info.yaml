@@ -1,14 +1,14 @@
 apiVersion: v1
 data:
   NETPORTAL_ADDR: netportal.{{ .Values.namespace | default "erda-system"}}.svc.cluster.local:80
-  NEXUS_ADDR: {{ .Values.nexus.name | default "addon-nexus" }}.{{ .Values.namespace | default "erda-system"}}.svc.cluster.local:8081
+  NEXUS_ADDR: {{ .Values.configmap.nexus.name | default "addon-nexus" }}.{{ .Values.namespace | default "erda-system"}}.svc.cluster.local:8081
   NEXUS_PASSWORD: admin123
   NEXUS_PUBLIC_URL: http://nexus-sys.{{ .Values.domain }}
   NEXUS_USERNAME: admin
-  {{- if eq .Values.registry.networkMode "host" }}
-  REGISTRY_ADDR: {{ .Values.registry.hostURL }}
+  {{- if eq (.Values.configmap.registry.networkMode | default "") "host" }}
+  REGISTRY_ADDR: {{ .Values.configmap.registry.hostURL }}
   {{- else }}
-  REGISTRY_ADDR: {{ .Values.registry.name | default "addon-registry" }}.{{ .Values.namespace | default "erda-system" }}.svc.cluster.local:5000
+  REGISTRY_ADDR: {{ .Values.configmap.registry.name | default "addon-registry" }}.{{ .Values.namespace | default "erda-system" }}.svc.cluster.local:5000
   {{- end }}
 kind: ConfigMap
 metadata:

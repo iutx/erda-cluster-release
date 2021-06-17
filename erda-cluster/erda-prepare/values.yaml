@@ -20,9 +20,17 @@ configmap:
 
   kubernetes:
     version: 1.18.8
-    master: ${KUBERNETES_MASTERIP}
-    mastervip: ${KUBERNETES_APISERVERVIP}
+    master: 10.0.7.182:6443
+    mastervip: 10.0.7.182:6443
     lb:
+
+  nexus:
+    name:
+
+  registry:
+    name:
+    networkMode:
+    hostURL:
 
 volumeProvisoner:
   name: volume-provisioner
