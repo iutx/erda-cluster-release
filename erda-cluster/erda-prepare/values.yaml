@@ -1,0 +1,42 @@
+namespace: "default"
+
+image:
+  repository: registry.erda.cloud/erda
+  imagePullPolicy: IfNotPresent
+
+erdaOperator:
+  name: erda-operator
+  version: 1.0.0-20210427-3d25066
+
+configmap:
+  size: demo
+  clustername: "fake-new"
+  domain: "fake-new.viper.run"
+  protocol: http
+
+  ssh:
+    user: root
+    password: ""
+
+  kubernetes:
+    version: 1.18.8
+    master: ${KUBERNETES_MASTERIP}
+    mastervip: ${KUBERNETES_APISERVERVIP}
+    lb:
+
+volumeProvisoner:
+  name: volume-provisioner
+  version: 1.0.0-20210416-1a3758f
+  provisioner:
+    local: dice/local-volume
+    nfs: dice/netdata-volume
+  storageclass:
+    local: dice-local-volume
+    nfs: dice-nfs-volume
+  resources:
+    requests:
+      cpu:
+      memory:
+    limits:
+      cpu:
+      memory:

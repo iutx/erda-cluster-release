@@ -1,0 +1,254 @@
+apiVersion: erda.terminus.io/v1beta1
+kind: Erda
+metadata:
+  name: erda
+  namespace: {{ .Values.namespace | default "erda-system" }}
+spec:
+  cookieDomain: {{ .Values.clusterDomain }}
+  diceCluster: {{ .Values.clusterName }}
+  size: 'test'
+  initJobs:
+    version: "2.0"
+    jobs:
+      init-image:
+        image: registry.erda.cloud/erda/init-image:4.0-20210609-659e9a0b
+        resources:
+          cpu: 0.5
+          mem: 128
+  mainPlatform:
+    collector: https://collector.{{ .Values.domain }}
+    openapi: https://openapi.{{ .Values.domain }}
+  platformDomain: {{ .Values.clusterDomain }}
+  dice:
+    version: "2.0"
+    meta: {}
+    envs:
+      ETCDCTL_API: "3"
+    services:
+      soldier:
+        cmd: /app/soldier
+        image: registry.erda.cloud/erda/soldier:4.0-20210426-daef74b
+        ports:
+          - port: 9028
+            protocol: TCP
+            l4_protocol: TCP
+            expose: true
+            default: false
+        envs:
+          FPS_BACKEND_URL: http://fps:17621
+          NETDATA_AGENT_PATH: devops/ci/action-agent
+          NETDATA_CI_PATH: devops/ci/pipelines
+          NETDATA_REGISTRY_PATH: dice/registry
+          NETDATA_SQLDATA_PATH: devops/storage
+          PROXY_SERVICES: fps,territory,troy,zkproxy
+          TERRITORY_BACKEND_RE: ^territory
+          TROY_BACKEND_RE: ^troy
+          ZKPROXY_BACKEND_RE: ^terminus-zkproxy
+        resources:
+          cpu: 0.01
+          mem: 100
+          max_cpu: 1
+          max_mem: 2048
+          network:
+            mode: container
+        binds:
+          - /netdata:/netdata:rw
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+        deployments:
+          replicas: 1
+          labels:
+            GROUP: dice
+        depends_on:
+          - openapi
+        expose:
+          - 9028
+        health_check:
+          http:
+            port: 9028
+            path: /_health_check
+            duration: 120
+          exec: {}
+    addons: {}
+
+  spotTelegraf:
+    version: "2"
+    meta: {}
+    envs: {}
+    services:
+      telegraf:
+        image: registry.erda.cloud/erda/telegraf:4.0-20210527-a8a0005
+        ports:
+        - port: 8090
+          protocol: TCP
+          l4_protocol: TCP
+          expose: false
+          default: false
+        envs:
+          CLUSTER_PATH: /rootfs/etc/cluster-node
+          COLLECTOR_AUTH_PASSWORD: G$9767bP32drYFPWrK4XMLRMTatiM6cU
+          COLLECTOR_AUTH_USERNAME: collector
+          HOST_ETC: /rootfs/etc
+          HOST_MOUNT_PREFIX: /rootfs
+          HOST_PROC: /rootfs/proc
+          HOST_SYS: /rootfs/sys
+          HPROF_OUTPUT_PATH: /rootfs/tmp
+          INPUT_DOCKER_TAG_KEYS: '[''DICE_*'', ''N?_DICE_*'', ''EDAS_*'', ''ADDON_ID'', ''N?_ADDON_ID'', ''TERMINUS_KEY'', ''TERMINUS_DEFINE_TAG'', ''MESOS_TASK_ID'', ''POD_IP'', ''io.kubernetes.pod.name'', ''io.kubernetes.pod.namespace'', ''io.kubernetes.pod.uid'']'
+          INPUT_METASERVER_FIELD_KEYS: '[''DICE_*'', ''N?_DICE_*'', ''EDAS_*'', ''TERMINUS_DEFINE_TAG'', ''POD_IP'', ''io.kubernetes.pod.name'', ''io.kubernetes.pod.namespace'']'
+          SADC_PATH: /usr/lib64/sa/sadc
+          SADF_PATH: /usr/bin/sadf
+          TELEGRAF_PPROF_PORT: "6962"
+        resources:
+          cpu: 0.01
+          mem: 100
+          max_cpu: 1
+          max_mem: 2048
+          network:
+              mode: host
+        binds:
+          - /:/rootfs:ro
+          - /tmp:/rootfs/tmp:rw
+          - /run/udev:/run/udev:ro
+        deployments:
+          replicas: 1
+          labels:
+            GROUP: spot-v2
+            PRIVILEGED: "true"
+        depends_on:
+        - collector
+        - telegraf-platform
+        health_check:
+          exec:
+            cmd: ps aux | grep telegraf || exit 1
+            duration: 120
+      telegraf-app:
+        image: registry.erda.cloud/erda/telegraf:4.0-20210527-a8a0005
+        ports:
+        - port: 8091
+          protocol: TCP
+          l4_protocol: TCP
+          expose: false
+          default: false
+        envs:
+          CLUSTER_PATH: /rootfs/etc/cluster-node
+          COLLECTOR_AUTH_PASSWORD: G$9767bP32drYFPWrK4XMLRMTatiM6cU
+          COLLECTOR_AUTH_USERNAME: collector
+          TELEGRAF_CONFIG: telegraf-app
+          TELEGRAF_PPROF_PORT: "6963"
+        resources:
+          cpu: 0.01
+          mem: 100
+          max_cpu: 1
+          max_mem: 2048
+          network:
+              mode: host
+        binds:
+          - /:/rootfs:ro
+        deployments:
+          replicas: 1
+          labels:
+            GROUP: spot-v2
+            PRIVILEGED: "true"
+        depends_on:
+        - collector
+        health_check:
+          exec:
+            cmd: ps aux | grep telegraf || exit 1
+            duration: 120
+      telegraf-platform:
+        image: registry.erda.cloud/erda/telegraf:4.0-20210527-a8a0005
+        ports:
+        - port: 8092
+          protocol: TCP
+          l4_protocol: TCP
+          expose: false
+          default: false
+        - port: 8094
+          protocol: UDP
+          l4_protocol: UDP
+          expose: false
+          default: false
+        - port: 8095
+          protocol: TCP
+          l4_protocol: TCP
+          expose: false
+          default: false
+        - port: 6963
+          protocol: TCP
+          l4_protocol: TCP
+          expose: false
+          default: false
+        - port: 7180
+          protocol: TCP
+          l4_protocol: TCP
+          expose: false
+          default: false
+        envs:
+          CASSANDRA_EXPORTER_JMX_ADDR: addon-cassandra-exporter-jmx.default.svc.cluster.local
+          CASSANDRA_JOLOKIA_PORT: "8778"
+          CLUSTER_PATH: /rootfs/etc/cluster-node
+          COLLECTOR_AUTH_PASSWORD: G$9767bP32drYFPWrK4XMLRMTatiM6cU
+          COLLECTOR_AUTH_USERNAME: collector
+          HOST_ETC: /rootfs/etc
+          HOST_MOUNT_PREFIX: /rootfs
+          HOST_PROC: /rootfs/proc
+          HOST_SYS: /rootfs/sys
+          HPROF_OUTPUT_PATH: /rootfs/tmp
+          KAFKA_JOLOKIA_PORT: "8778"
+          TELEGRAF_CONFIG: platform.alone
+          TELEGRAF_PPROF_PORT: "6964"
+          TERMINUS_LOG_COLLECT: "false"
+        resources:
+          cpu: 0.01
+          mem: 100
+          max_cpu: 1
+          max_mem: 2048
+        binds:
+          - /:/rootfs:ro
+          - /netdata/dice-ops/dice-config/certificates:/netdata/dice-ops/dice-config/certificates:ro
+        deployments:
+          replicas: 1
+          labels:
+              GROUP: spot-v2
+              PRIVILEGED: "true"
+        depends_on:
+        - collector
+        health_check:
+          exec:
+            cmd: ps aux | grep telegraf || exit 1
+            duration: 120
+    addons: {}
+  spotFilebeat:
+    version: "2.0"
+    meta: {}
+    envs: {}
+    services:
+      filebeat:
+        image: registry.erda.cloud/erda/filebeat:4.0.0-20210422-5b97371
+        envs:
+          DOCKER_SOCK_PATH: unix:///rootfs/var/run/docker.sock
+          COLLECTOR_AUTH_PASSWORD: G$9767bP32drYFPWrK4XMLRMTatiM6cU
+          COLLECTOR_AUTH_USERNAME: collector
+        resources:
+          cpu: 0.01
+          mem: 100
+          max_cpu: 1
+          max_mem: 2048
+          network:
+            mode: container
+        binds:
+        - /var/lib/docker/containers:/var/lib/docker/containers:ro
+        - /data/kube-apiserver/audit-logs:/data/kube-apiserver/audit-logs:ro
+        - /data/spot-v2/filebeat:/data/spot/filebeat:rw
+        - /var/run:/rootfs/var/run:ro
+        deployments:
+          replicas: 1
+          labels:
+            GROUP: spot-v2
+        depends_on:
+        - collector
+        health_check:
+          http: {}
+          exec:
+            cmd: ps aux | grep filebeat || exit 1
+            duration: 120
+    addons: {}

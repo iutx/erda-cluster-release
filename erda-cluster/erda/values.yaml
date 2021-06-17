@@ -1,0 +1,11 @@
+namespace: default
+
+image:
+  repository: registry.erda.cloud/erda/
+  imagePullPolicy: IfNotPresent
+  components:
+    init: init-image:1.0.0-20210510-21a3c66
+    erda: erda:1.0.0-20210510-d7dd555
+    telegraf: telegraf:1.0.0-20210510-dc02a9d
+    filebeat: filebeat:1.0.0-20210422-5b97371
+    soldier: soldier:1.0.0-20210426-daef74b
