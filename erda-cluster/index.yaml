@@ -3,7 +3,28 @@ entries:
   erda-cluster:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2021-06-17T19:43:34.031106+08:00"
+    created: "2021-06-23T13:48:28.054167+08:00"
+    description: An open-source platform bases on Kubernetes that can deploy microservice
+      applications.
+    digest: 3fcf9301ad377e5bc0bbfde2d22c2435d12e5b0af61969f5189efce6d3797b7e
+    home: https://www.erda.cloud/
+    icon: https://github.com/erda-project/erda/raw/develop/docs/files/logo.jpg
+    keywords:
+    - Kubernetes
+    - microservice
+    - open-source
+    name: erda-cluster
+    sources:
+    - https://github.com/erda-project/erda
+    - https://github.com/erda-project/erda-infra
+    - https://github.com/erda-project/erda-ui
+    type: application
+    urls:
+    - https://iutx.github.io/erda-cluster-release/erda-cluster/erda-cluster-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2021-06-23T13:48:28.053223+08:00"
     description: An open-source platform bases on Kubernetes that can deploy microservice
       applications.
     digest: a557f7082b01d357e20b043ba609f71b385830d1646bea4711dc76514f02b83c
@@ -25,7 +46,28 @@ entries:
   erda-cluster-prepare:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2021-06-17T19:43:34.032678+08:00"
+    created: "2021-06-23T13:48:28.057792+08:00"
+    description: An open-source platform bases on Kubernetes that can deploy microservice
+      applications.
+    digest: eae0f45f5aded9ac4701e7aeb07f741c23f8d06dd713f4ea411efa2c13de2d24
+    home: http://www.erda.cloud/
+    icon: https://github.com/erda-project/erda/raw/develop/docs/files/logo.jpg
+    keywords:
+    - Kubernetes
+    - microservice
+    - open-source
+    name: erda-cluster-prepare
+    sources:
+    - https://github.com/erda-project/erda
+    - https://github.com/erda-project/erda-infra
+    - https://github.com/erda-project/erda-ui
+    type: application
+    urls:
+    - https://iutx.github.io/erda-cluster-release/erda-cluster/erda-cluster-prepare-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.0.0
+    created: "2021-06-23T13:48:28.056445+08:00"
     description: An open-source platform bases on Kubernetes that can deploy microservice
       applications.
     digest: 0b752f14a4e64386f559670e7f5b2f700d7b6508c280e143bf19d5218a8f029f
@@ -44,4 +86,4 @@ entries:
     urls:
     - https://iutx.github.io/erda-cluster-release/erda-cluster/erda-cluster-prepare-0.1.0.tgz
     version: 0.1.0
-generated: "2021-06-17T19:43:34.02633+08:00"
+generated: "2021-06-23T13:48:28.051902+08:00"
