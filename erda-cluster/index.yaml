@@ -3,10 +3,10 @@ entries:
   erda-cluster:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2021-06-23T13:48:28.054167+08:00"
+    created: "2021-06-24T14:20:53.132798+08:00"
     description: An open-source platform bases on Kubernetes that can deploy microservice
       applications.
-    digest: 3fcf9301ad377e5bc0bbfde2d22c2435d12e5b0af61969f5189efce6d3797b7e
+    digest: 708be152d1e65772d416331df045da82729340c52249e586f66752fb0c81ff90
     home: https://www.erda.cloud/
     icon: https://github.com/erda-project/erda/raw/develop/docs/files/logo.jpg
     keywords:
@@ -24,7 +24,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2021-06-23T13:48:28.053223+08:00"
+    created: "2021-06-24T14:20:53.13202+08:00"
     description: An open-source platform bases on Kubernetes that can deploy microservice
       applications.
     digest: a557f7082b01d357e20b043ba609f71b385830d1646bea4711dc76514f02b83c
@@ -46,10 +46,14 @@ entries:
   erda-cluster-prepare:
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2021-06-23T13:48:28.057792+08:00"
+    created: "2021-06-24T14:20:53.137783+08:00"
+    dependencies:
+    - name: mariadb
+      repository: https://charts.helm.sh/stable
+      version: 7.3.14
     description: An open-source platform bases on Kubernetes that can deploy microservice
       applications.
-    digest: eae0f45f5aded9ac4701e7aeb07f741c23f8d06dd713f4ea411efa2c13de2d24
+    digest: f6544040c4f10921b47d4d4e61a7f7141ff96c277d99113942277b5a9534b9b8
     home: http://www.erda.cloud/
     icon: https://github.com/erda-project/erda/raw/develop/docs/files/logo.jpg
     keywords:
@@ -67,7 +71,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2021-06-23T13:48:28.056445+08:00"
+    created: "2021-06-24T14:20:53.134228+08:00"
     description: An open-source platform bases on Kubernetes that can deploy microservice
       applications.
     digest: 0b752f14a4e64386f559670e7f5b2f700d7b6508c280e143bf19d5218a8f029f
@@ -86,4 +90,4 @@ entries:
     urls:
     - https://iutx.github.io/erda-cluster-release/erda-cluster/erda-cluster-prepare-0.1.0.tgz
     version: 0.1.0
-generated: "2021-06-23T13:48:28.051902+08:00"
+generated: "2021-06-24T14:20:53.129223+08:00"
