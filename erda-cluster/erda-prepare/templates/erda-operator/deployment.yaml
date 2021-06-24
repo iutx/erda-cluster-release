@@ -17,13 +17,13 @@ spec:
       labels:
         app: {{ .Values.erdaOperator.name | default "erda-operator" }}
     spec:
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-              - matchExpressions:
-                  - key: erda/viper
-                    operator: Exists
+{{/*      affinity:*/}}
+{{/*        nodeAffinity:*/}}
+{{/*          requiredDuringSchedulingIgnoredDuringExecution:*/}}
+{{/*            nodeSelectorTerms:*/}}
+{{/*              - matchExpressions:*/}}
+{{/*                  - key: erda/viper*/}}
+{{/*                    operator: Exists*/}}
       serviceAccountName: {{ .Values.erdaOperator.name | default "erda-operator" }}
       containers:
       - image: {{ .Values.image.repository }}/{{ .Values.erdaOperator.name | default "erda-operator" }}:{{ .Values.erdaOperator.version }}
