@@ -17,6 +17,13 @@ spec:
       labels:
         app: volume-provisioner
     spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: viper/erda
+                    operator: Exists
       serviceAccountName: volume-provisioner
       containers:
         - image: {{ .Values.image.repository }}/{{ .Values.volumeProvisoner.name | default "volume-provisioner" }}:{{ .Values.volumeProvisoner.version }}
